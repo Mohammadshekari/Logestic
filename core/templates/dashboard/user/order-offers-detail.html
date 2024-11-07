@@ -1,0 +1,91 @@
+{% extends 'dashboard/user/base.html' %}
+{% load static %}
+
+{% block title %}
+Order Offers Detail
+{% endblock title %}
+
+
+{% block content %}
+
+<header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
+    <div class="container-xl px-4">
+        <div class="page-header-content">
+            <div class="row justify-content-between pt-3">
+                <div class="col-auto mb-3">
+                    <h1 class="page-header-title">
+                        <div class="page-header-icon">NettiMuutto</div>
+                        > Order #{{order.pk}} > Offer #{{object.id}} > Detail
+                    </h1>
+                </div>
+                <div class="col-auto mb-3">
+                    <a href="{% url 'dashboard:user:order-offers-list' uuid=order.uuid %}"
+                        class="btn btn-sm btn-primary me-2">Back to offers list</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container-xl px-4 mt-4">
+    <div class="card card-icon mb-4">
+        <div class="card-header">Company Information</div>
+        <div class="row g-0">
+            <div class="col-md-3 card-icon-aside">
+                <img class="w-100 rounded" src="{{object.user.company_profile.image.url}}">
+            </div>
+            <div class="col-md-4">
+
+                <div class="card-body align-items-center text-center">
+                    <h1 class="card-title">{{object.user.company_profile.name}}</h1>
+                    <div class="text-xs text-muted mt-2">
+                        <div>
+                            {% with rating=object.user.company_profile.rate %}
+                            {% for i in "12345" %}
+                            {% if i|add:'0' <= rating %} <span class="fa fa-star checked"></span>
+                                {% else %}
+                                <span class="fa fa-star unchecked"></span>
+                                {% endif %}
+                                {% endfor %}
+                                {{ rating }}/5
+                                {% endwith %}
+                        </div>
+                    </div>
+             
+                    <div class="text-s mt-2">
+                        <span class="fw-bold">Established date: </span>
+                        <span>{{object.user.company_profile.established_date|date:"Y-m-d"}}</span>
+                    </div>
+                    <div class="text-s  mt-2">
+                        <span class="fw-bold">Serial number: </span>
+                        <span>{{object.user.company_profile.serial_number}}</span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-5">
+
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Offer Details</div>
+        <div class="card-body">{{object.description|safe}}</div>
+        <div class="card-footer">Created Date: {{object.created_date|date:"Y-m-d H:i"}}</div>
+    </div>
+    {% if not is_accepted %}
+    <div class="text-center mt-5">
+        <h4 class="mb-3">Does it suits you?</h4>
+        <div class="mb-3">
+            <form action="{% url 'dashboard:user:order-offers-accept' offer_id=object.id uuid=order.uuid  %}" method="post">
+                {% csrf_token %}
+                <button class="btn btn-primary mx-2 px-3" type="submit">
+                    Accept the offer
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}

@@ -1,0 +1,29 @@
+{% extends 'emails/base.html' %}
+
+{% block content %}
+<p class="greeting">Dear, {{ company_profile.name }}!</p>
+<p class="description-container">
+    We trust this message finds you well. We are pleased to inform you that Invoice #{{invoice.invoice_number}} has been created
+    for your recent transactions with us. Please take a moment to review the invoice details, which are attached
+    herewith.
+    <strong>Invoice Details:</strong>
+<ul>
+    <li>Invoice Number: #{{invoice.invoice_number}}</li>
+    <li>Date Created: {{invoice.created_date}}</li>
+</ul>
+</p>
+<p>
+    <strong>Action Required:</strong>
+    Kindly check the details and process the payment at your earliest convenience.
+</p>
+<p>
+    If you have any questions or concerns regarding the invoice, feel free to reach out to our finance department at
+    [Finance Contact Information].</p>
+
+<p>Thank you for your continued partnership. We appreciate your business.</p>
+
+<div class="button-container">
+    <a href="{{ protocol }}://{{ domain }}{% url 'accounts:login-use-token' %}?authentication_key={{jwt_token}}&next=#"
+        class="button">Check Order</a>
+</div>
+{% endblock %}

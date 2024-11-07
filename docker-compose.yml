@@ -1,0 +1,133 @@
+services:
+
+  redis:
+    container_name: redis
+    image: redis
+    restart: always
+    ports:
+    - "6379:6379"
+    command: redis-server --save 60 1 --loglevel warning
+
+  db:
+    container_name: db
+    image: postgis/postgis:15-master
+    volumes:
+      - ./postgre/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    restart: always
+    
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: dockerfiles/dev/django/Dockerfile
+    container_name: backend
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./core:/usr/src/app
+    ports:
+      - "8099:8000"
+      - "5678:5678"
+    environment:
+      - SECRET_KEY=test
+      - DEBUG=True
+      - COMINGSOON=False
+      - SHOW_DEBUGGER_TOOLBAR=True
+      - ENABLE_DEBUGPY=True
+      - EMAIL_HOST=smtp.elasticemail.com
+      - EMAIL_PORT=2525
+      - EMAIL_HOST_USER=m.shekari79b4@gmail.com
+      - DEFAULT_FROM_EMAIL=m.shekari79b4@gmail.com
+      - EMAIL_HOST_PASSWORD=13457BB7EADC69E6C3209AE1F65A4AF0F853
+    restart: always
+
+    depends_on:
+      # - redis
+      - db
+
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: dockerfiles/dev/django/Dockerfile
+    command: celery -A core worker --loglevel=info
+    container_name: weather-celery_worker
+    volumes:
+      - ./core:/usr/src/app
+    environment:
+      - SECRET_KEY=test
+      - DEBUG=True
+      - COMINGSOON=False
+      - SHOW_DEBUGGER_TOOLBAR=True
+      - ENABLE_DEBUGPY=True
+    restart: always
+    depends_on:
+      - redis
+      - db
+      - backend
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: dockerfiles/dev/django/Dockerfile
+    command: celery -A core beat -l info
+    container_name: weather-celery_beat
+    volumes:
+      - ./core:/usr/src/app
+    environment:
+      - SECRET_KEY=test
+      - DEBUG=True
+      - COMINGSOON=False
+      - SHOW_DEBUGGER_TOOLBAR=True
+      - ENABLE_DEBUGPY=True
+
+    restart: always
+    depends_on:
+      - redis
+      - db
+      - backend
+
+
+
+    # minio:
+    #   image: minio/minio
+    #   container_name: minio
+    #   expose:
+    #     - 9000
+    #     - 9001
+    #   ports:
+    #     - "9000:9000"
+    #     - "9001:9001"
+    #   volumes:
+    #     - './minio/data:/data'
+    #   environment:
+    #     MINIO_ROOT_USER: minioadmin
+    #     MINIO_ROOT_PASSWORD: minioadmin
+    #   command: server --console-address ":9001" /data
+
+  smtp4dev:
+    image: rnwood/smtp4dev:v3
+    restart: always
+    ports:
+      # Change the number before : to the port the web interface should be accessible on
+      - '5001:80'
+      # Change the number before : to the port the SMTP server should be accessible on
+      - '25:25'
+      # Change the number before : to the port the IMAP server should be accessible on
+      - '143:143'
+    volumes:
+      # This is where smtp4dev stores the database..
+      - smtp4dev-data:/smtp4dev
+    environment:
+      - ServerOptions__HostName=smtp4dev
+
+volumes:
+  smtp4dev-data:

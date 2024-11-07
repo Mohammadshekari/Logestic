@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "name": "Python: Django",
+            "type": "python",
+            "request": "attach",
+            "port": 5678,
+            "host": "127.0.0.1",
+        }
+    ]
+}

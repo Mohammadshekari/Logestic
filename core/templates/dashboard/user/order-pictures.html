@@ -1,0 +1,81 @@
+{% extends 'dashboard/user/base.html' %}
+{% load static %}
+
+{% block title %}
+Add Pictures
+{% endblock title %}
+
+{% block extra_css %}
+<style>
+    .card-img {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    
+    .remove-img-button {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+</style>
+{% endblock extra_css %}
+
+
+{% block content %}
+
+<header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
+    <div class="container-xl px-4">
+        <div class="page-header-content">
+            <div class="row align-items-center justify-content-between pt-3">
+                <div class="col-auto mb-3">
+                    <h1 class="page-header-title">
+                        <div class="page-header-icon">NettiMuutto</div>
+                        > Order #{{order.pk}} > Pictures
+                    </h1>
+                </div>
+                <div class="col-auto mb-3">
+                    <a href="{% url 'dashboard:user:order-detail' uuid=order.uuid %}"
+                        class="btn btn-sm btn-primary me-2">Back to order detail</a>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</header>
+
+<div class="container-xl px-4">
+    <div class="card mb-4">
+        <form action="{% url 'dashboard:user:order-pictures' uuid=order.uuid %}" method="post" enctype="multipart/form-data">
+            <div class="card-header">Add Pictures</div>
+            <div class="card-body">
+                {% csrf_token %}
+                {{form.file}}
+            </div>
+            <div class="card-footer d-flex justify-content-end">
+                <button class="btn btn-danger me-3" disabled>Cancel</button>
+                <button type="submit" class="btn btn-primary me-3">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row mb-4">
+        {% for image in order_pictures %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img class="card-img" src="{{image.file.url}}" alt="..." style="width: 100%; height: 300px; object-fit:cover">
+                <a href="{% url 'dashboard:user:order-pictures-delete' uuid=order.uuid picture_id=image.id %}" class="btn btn-danger remove-button remove-img-button">Remove</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">Advertisement</div>
+        <div class="card-body">
+
+            This compact page header example strips down the page header element to create a
+            seamless, slim page header.
+        </div>
+    </div>
+</div>
+{% endblock content %}

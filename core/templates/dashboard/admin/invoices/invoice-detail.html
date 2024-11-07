@@ -1,0 +1,155 @@
+{% extends 'dashboard/admin/base.html' %}
+{% load static %}
+{% block title %}
+{% endblock title %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container-xl px-4 mt-5">
+    <!-- Knowledge base article-->
+    <div class="card mb-4">
+        <div class="card-header d-flex align-items-center">
+            <a class="btn btn-transparent-dark btn-icon" href="{% url 'dashboard:admin:invoice-list' %}"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-arrow-left">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg></a>
+            <div class="ms-3">
+                <h2 class="my-3">Invoice #{{object.id}}</h2>
+                <small class="text-mute">{{object.created_date|date:"Y-m-d h:i"}}</small>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="border-bottom">
+                <div class="row">
+
+                    <div class="card-body row">
+                        <h4 class="card-title">Basic brief information</h4>
+                        <div class="table-responsive">
+                            <table class="table table-borderless mb-0">
+                                <thead class="border-bottom">
+                                    <tr class="small text-uppercase text-muted">
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Orders</th>
+                                        <th class="text-end" scope="col">Client</th>
+                                        <th class="text-end" scope="col">Created Date</th>
+                                        <th class="text-end" scope="col">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in object.orders.all %}
+                                    <!-- Invoice item 1-->
+                                    <tr class="border-bottom">
+                                        <td>
+                                            <div class="fw-bold me-5">{{order.id}}</div>
+                                        </td>
+                                        <td>
+
+                                            <div class="small text-muted d-none d-md-block">
+                                                {{order.order_origin.address}}</div>
+                                        </td>
+                                        <td class="text-end fw-bold">{{order.get_fullname}}</td>
+                                        <td class="text-end fw-bold">{{order.created_date|date:"Y-m-d h:i"}}</td>
+                                        <td class="text-end fw-bold">{{order.price}}</td>
+
+                                    </tr>
+                                    {% endfor %}
+
+                                    <!-- Invoice subtotal-->
+                                    <tr>
+                                        <td class="text-end pb-0" colspan="4">
+                                            <div class="text-uppercase small fw-700 text-muted">Subtotal:</div>
+                                        </td>
+                                        <td class="text-end pb-0">
+                                            <div class="h5 mb-0 fw-700">{{object.total_amount}}</div>
+                                        </td>
+                                    </tr>
+                                    <!-- Invoice tax column-->
+                                    <tr>
+                                        <td class="text-end pb-0" colspan="4">
+                                            <div class="text-uppercase small fw-700 text-muted">Tax
+                                                ({{object.tax_amount}}%):</div>
+                                        </td>
+                                        <td class="text-end pb-0">
+                                            <div class="h5 mb-0 fw-700">{{object.total_tax_amount}}</div>
+                                        </td>
+                                    </tr>
+                                    <!-- Invoice total-->
+                                    <tr>
+                                        <td class="text-end pb-0" colspan="4">
+                                            <div class="text-uppercase small fw-700 text-muted">Total Amount Due:</div>
+                                        </td>
+                                        <td class="text-end pb-0">
+                                            <div class="h5 mb-0 fw-700 text-green">{{object.final_amount}}</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-end pb-0" colspan="4">
+                                            <div class="text-uppercase small fw-700 text-muted">Payment Date Due:</div>
+                                        </td>
+                                        <td class="text-end pb-0">
+                                            <div class="h5 mb-0 fw-700 text-red">{{object.deadline_date|date:'Y-m-d'}}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                    <div class="card-footer p-4 p-lg-5 border-top-0">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+                                <!-- Invoice - sent to info-->
+                                <div class="small text-muted text-uppercase fw-700 mb-2">To</div>
+                                <div class="h6 mb-1">{{object.user.profile.name}}</div>
+                                <div class="small">{{object.user.profile.address}}</div>
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+                                <!-- Invoice - sent from info-->
+                                <div class="small text-muted text-uppercase fw-700 mb-2">From</div>
+                                <div class="h6 mb-0">NettiMutto</div>
+                                <div class="h6 mb-0">Logistic Company</div>
+                            </div>
+                            <div class="col-lg-4">
+                                <!-- Invoice - additional notes-->
+                                <div class="small text-muted text-uppercase fw-700 mb-2">Note</div>
+                                <div class="small mb-0">Payment is due 7 days after receipt of this invoice. Please
+                                    make checks or money orders out to Company Name, and include the invoice number in
+                                    the memo. We appreciate your business, and hope to be working with you again very
+                                    soon!</div>
+                            </div>
+                            <div class="col-lg-2">
+
+                                <form method="post" action=".">
+                                    {% csrf_token %}
+                                    <div class="">
+                                        <div class="pb-3">
+                                            {{form.state}}
+                                        </div>
+                                        <button class="btn btn-primary w-100" type="submit"> change state</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+
+{% endblock extra_js %}

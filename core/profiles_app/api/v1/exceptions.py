@@ -1,0 +1,3 @@
+from utils.api.exceptions import CustomValidationException
+
+CustomValidationException = CustomValidationException

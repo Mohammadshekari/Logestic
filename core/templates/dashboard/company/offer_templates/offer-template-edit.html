@@ -1,0 +1,88 @@
+{% extends 'dashboard/company/base.html' %}
+{% load static %}
+{% block title %}
+{% endblock title %}
+
+{% block extra_css %}
+<link href="{% static 'plugins/summernote/summernote-lite.min.css' %}" rel="stylesheet" />
+{% endblock extra_css %}
+
+
+{% block content %}
+<div class="container-fluid my-5 px-4">
+    <form method="post" action="." class="row gx-4">
+        {% csrf_token %}
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header">Template Title</div>
+                <div class="card-body">
+                    <input class="form-control" type="text" placeholder="Enter your template title..."
+                        value="{{form.instance.title}}" name="title" required />
+                </div>
+            </div>
+            <div class="card card-header-actions mb-4" style="min-height:500px">
+                <div class="card-header">
+                    Template Description
+                </div>
+                <div class="card-body">
+                    <textarea name="description"  id="summernote">{{form.instance.description}}</textarea>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-4">
+            <div class="card card-header-actions">
+                <div class="card-header">
+                    Publish
+
+                </div>
+                <div class="card-body">
+                    <div class="d-grid mb-3">
+                        <button class="fw-500 btn btn-primary ">Save</button>
+                    </div>
+                    <div class="d-grid mb-3">
+                        <a href="{% url 'dashboard:company:offer-template-list' %}"
+                            class="fw-500 btn btn-outline-secondary">Back to list</a>
+                    </div>
+                    <div class="d-grid mb-3">
+
+                        <button type="button" class="fw-500 btn btn-outline-danger" data-bs-toggle="modal"
+                            data-bs-target="#deleteModal">
+                            Delete
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" action="{% url 'dashboard:company:offer-template-delete' pk=form.instance.id %}" class="modal-content">
+            {% csrf_token %}
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Template Approval</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mt-1">Are you Sure you want to remove the Template?</p> 
+                <p class="mt-1">After removing the item it will not be recoverable.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block extra_js %}
+<script src="{% static 'plugins/summernote/summernote-lite.min.js' %}"></script>
+<script src="{% static 'plugins/summernote/summernote-init.js' %}"></script>
+
+{% endblock extra_js %}

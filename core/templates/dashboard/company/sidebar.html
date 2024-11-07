@@ -1,0 +1,59 @@
+<!-- Sidenav Menu Heading (Core)-->
+<div class="sidenav-menu-heading">Core</div>
+<!-- Sidenav Accordion (Dashboard)-->
+<a class="nav-link collapsed" href="{% url 'dashboard:home' %}">
+    <div class="nav-link-icon"><i data-feather="activity"></i></div>
+    Dashboard
+
+</a>
+<!-- Sidenav Heading (Custom)-->
+<div class="sidenav-menu-heading">Orders & Offers</div>
+<!-- Sidenav Accordion (Pages)-->
+
+<a class="nav-link " href="{% url 'dashboard:company:order-list' %}">
+    <div class="nav-link-icon"><i data-feather="inbox"></i></div>
+    Orders
+</a>
+<a class="nav-link " href="{% url 'dashboard:company:offer-list' %}">
+    <div class="nav-link-icon"><i data-feather="list"></i></div>
+    Offers
+</a>
+<a class="nav-link " href="{% url 'dashboard:company:conversation-list' %}">
+    <div class="nav-link-icon"><i data-feather="message-square"></i></div>
+    Conversations
+</a>
+
+<!-- Sidenav Heading (Custom)-->
+<div class="sidenav-menu-heading">Utilities</div>
+<a class="nav-link " href="{% url 'dashboard:company:offer-template-list' %}">
+    <div class="nav-link-icon"><i data-feather="file-text"></i></div>
+    Offer Templates
+</a>
+
+
+<!-- Sidenav Heading (Custom)-->
+<div class="sidenav-menu-heading">Support</div>
+<a class="nav-link " href="{% url 'dashboard:company:ticket-list' %}">
+    <div class="nav-link-icon"><i data-feather="mail"></i></div>
+    Tickets
+</a>
+<!-- Sidenav Heading (Custom)-->
+<div class="sidenav-menu-heading">Finances</div>
+<a class="nav-link " href="{% url 'dashboard:company:invoice-list' %}">
+    <div class="nav-link-icon"><i data-feather="dollar-sign"></i></div>
+    Invoices
+</a>
+<a class="nav-link " href="#">
+    <div class="nav-link-icon"><i data-feather="bar-chart-2"></i></div>
+    Statics
+</a>
+<!-- Sidenav Heading (Custom)-->
+<div class="sidenav-menu-heading">Settings</div>
+<a class="nav-link " href="{% url 'dashboard:company:profile-edit' %}">
+    <div class="nav-link-icon"><i data-feather="user"></i></div>
+    Profile
+</a>
+<a class="nav-link " href="{% url 'dashboard:company:security-edit' %}">
+    <div class="nav-link-icon"><i data-feather="shield"></i></div>
+    security
+</a>

@@ -1,0 +1,17 @@
+{% extends 'emails/base.html' %}
+{% block content %}
+<p class="greeting">Hello, {{ company_profile.name }}!</p>
+<p class="description-container">
+    We are sorry to let you know that your offer has been canceled by the user, the detail of your offer was described
+    below:
+    <br>
+    {{ offer.description|safe }}
+
+    <br>
+    If there is any objection you can inform our supports
+</p>
+<div class="button-container">
+    <a href="{{ protocol }}://{{ domain }}{% url 'accounts:login-use-token' %}?authentication_key={{jwt_token}}&next={% url 'dashboard:company:order-detail' pk=order.id  %}"
+        class="button">Check Order</a>
+</div>
+{% endblock %}

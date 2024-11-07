@@ -1,0 +1,220 @@
+{% extends 'dashboard/admin/base.html' %}
+{% load static %}
+{% block title %} Invoices List{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<header class="page-header page-header-dark bg-gradient-primary-to-secondary pb-10">
+    <div class="container-xl px-4">
+        <div class="page-header-content pt-4">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-auto mt-4">
+                    <h1 class="page-header-title">
+                        <div class="page-header-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg></div>
+                        Invoices List
+                    </h1>
+                    <div class="page-header-subtitle">Check all the invoices</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</header>
+<div class="container-xl px-4  mt-n10">
+    <div class="card">
+        <div class="card-header">Invoices Table</div>
+        <div class="card-body">
+            <div class="dataTable-wrapper no-footer  fixed-columns">
+                <div class="row">
+                    <form id="filter-form" method="GET" action="">
+                        <div class="dataTable-top">
+
+                            <div class="dataTable-dropdown">
+                                <label>Entries Page
+                                    <select class="dataTable-selector" id="page-size-num">
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                        <option value="20">20</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                </label>
+
+                                <label>Ordering filters
+                                    <select class="dataTable-selector" id="ordering-filter">
+                                        <option value="" selected>None</option>
+                                        <option value="created_date">Newest</option>
+                                        <option value="-created_date">Oldest</option>
+
+                                    </select>
+                                </label>
+                            </div>
+
+
+                            <div class="dataTable-search">
+                                <div class="input-group input-group-joined">
+                                    <input class="form-control pe-0" type="text" placeholder="Input text search"
+                                        aria-label="Search" id="search-filter-input">
+                                    <span class="input-group-text">
+                                        <i data-feather="search"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="dataTable-container">
+                    <table class="dataTable-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 4.08372%;">Id</th>
+                                <th style="width: 10.2795%;">Invoice Number</th>
+                                <th style="width: 10%;">Status</th>
+                                <th style="width: 9.28117%;">Total Amount</th>
+                                <th style="width: 10%;">Deadline Date</th>
+                                <th style="width: 8.68718%;">Created Date</th>
+                                <th style="width: 3.49919%;">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="table-item-wrapper">
+                            {% for object in object_list %}
+                            <tr>
+                                <td>{{object.id}}</td>
+                                <td>{{object.invoice_number}}</td>
+                                <td><span class="badge {% if object.state == 1 %} bg-danger {% else %} bg-success {% endif %}">{{object.get_state_display }}</span></td>
+                                <td>{{object.total_amount}}</td>
+                                <td>{{object.deadline_date|date:"Y-m-d h:i"}}</td>
+                                <td>{{object.created_date|date:"Y-m-d h:i"}}</td>
+                                <td>
+                                    <a href="{% url 'dashboard:admin:invoice-detail' pk=object.id %}"
+                                        class="btn btn-primary">
+                                        Show
+                                    </a>
+
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="dataTable-bottom">
+                    <div class="dataTable-info">Total entries <span id="total-items"> {{ total_result }}</span></div>
+
+                    <nav class="dataTable-pagination">
+                        {% if page_obj.has_other_pages %}
+                        <div class="d-flex">
+                            <div class="text-center justify-content-center">
+
+                                <div aria-label="Offers Pagination">
+                                    <ul class="pagination">
+                                        {% if page_obj.has_previous %}
+                                        <li class="page-item">
+                                            <button class="page-link"
+                                                onclick="changePageTo(`{{page_obj.previous_page_number}}`)">Previous</button>
+                                        </li>
+                                        {% endif %}
+                                        {% for i in page_obj.paginator.page_range %}
+                                        {% if page_obj.number == i %}
+                                        <li class="page-item mb-0 active"><a class="page-link " href="#">{{i}}</a>
+                                        </li>
+                                        {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <li
+                                            class="page-item mb-0 "><button class="page-link"
+                                                onclick="changePageTo(`{{i}}`)">{{i}}</button>
+                                            </li>
+                                            {% endif %}
+                                            {% endfor %}
+
+                                            {% if page_obj.has_next %}
+
+                                            <li class="page-item">
+                                                <button class="page-link"
+                                                    onclick="changePageTo(`{{ page_obj.next_page_number }}`)">Next</button>
+                                            </li>
+                                            {% endif %}
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endif %}
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+    $(document).ready(function () {
+        // Get the current URL query parameters
+        const currentParams = new URLSearchParams(window.location.search);
+
+        // Set the initial values of the dropdowns and search input based on the URL parameters
+        $('#page-size-num').val(currentParams.get('paginate_by') || '10');
+        $('#ordering-filter').val(currentParams.get('ordering') || '');
+        $('#search-filter-input').val(currentParams.get('q') || '');
+
+        // Update the form's action attribute with the updated URL parameters when the form is submitted
+        $('#filter-form').on('change', function (e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            const params = new URLSearchParams();
+            params.set('paginate_by', $('#page-size-num').val());
+            params.set('ordering', $('#ordering-filter').val());
+            params.set('q', $('#search-filter-input').val());
+
+            const newUrl = window.location.pathname + '?' + params.toString();
+            window.location.href = newUrl; // Redirect to the new URL
+        });
+        $('#filter-form').on('submit', function (e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            const params = new URLSearchParams();
+            params.set('paginate_by', $('#page-size-num').val());
+            params.set('ordering', $('#ordering-filter').val());
+            params.set('q', $('#search-filter-input').val());
+
+            const newUrl = window.location.pathname + '?' + params.toString();
+            window.location.href = newUrl; // Redirect to the new URL
+        });
+    });
+</script>
+<script>
+    window.addEventListener("DOMContentLoaded", (event) => {
+        // Get the current URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Get the values from the URL parameters
+        const pageSize = urlParams.get('paginate_by') || '10';
+        const ordering = urlParams.get('ordering') || '';
+        const search = urlParams.get('q') || '';
+
+        // Set the values in the form elements
+        $('#page-size-num option').each(function () {
+            if ($(this).val() === pageSize) {
+                $(this).prop('selected', true);
+            } else {
+                $(this).prop('selected', false);
+            }
+        });
+        $('#ordering-filter').val(ordering);
+        $('#search-filter-input').val(search);
+    })
+</script>
+{% endblock %}

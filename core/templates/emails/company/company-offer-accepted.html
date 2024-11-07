@@ -1,0 +1,18 @@
+{% extends 'emails/base.html' %}
+
+{% block content %}
+<p class="greeting">Hello, {{ company_profile.name }}!</p>
+<p class="description-container">
+    We are pleased to let you know that your offer has been accepted by the user, the detail of your offer was described
+    below:
+    <br>
+    {{ offer.description|safe }}
+
+    <br>
+    You can also make any necessary conversions you deem with the user, in the order page.
+</p>
+<div class="button-container">
+    <a href="{{ protocol }}://{{ domain }}{% url 'accounts:login-use-token' %}?authentication_key={{jwt_token}}&next={% url 'dashboard:company:offer-detail' pk=offer.id  %}"
+        class="button">Check Order</a>
+</div>
+{% endblock %}

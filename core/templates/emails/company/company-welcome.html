@@ -1,0 +1,14 @@
+{% extends 'emails/base.html' %}
+
+{% block content %}
+<p class="greeting">We are glad to have you</p>
+<p class="description-container">
+    Please be informed that your account will be available after validating your information.
+    but in the mean time you can proceed and use the platform.
+
+</p>
+<div class="button-container">
+    <a href="{{ protocol }}://{{ domain }}{% url 'accounts:login-use-token' %}?authentication_key={{jwt_token}}"
+        class="button">Login</a>
+</div>
+{% endblock  %}

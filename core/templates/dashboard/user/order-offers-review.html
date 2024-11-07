@@ -1,0 +1,143 @@
+{% extends 'dashboard/user/base.html' %}
+{% load static %}
+
+{% block title %}
+Company Review
+{% endblock title %}
+
+
+{% block extra_css %}
+<link href="{% static 'plugins/summernote/summernote-lite.min.css' %}" rel="stylesheet" />
+
+{% endblock extra_css %}
+
+
+{% block content %}
+
+<header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
+    <div class="container-xl px-4">
+        <div class="page-header-content">
+            <div class="row align-items-center justify-content-between pt-3">
+                <div class="col-auto mb-3">
+                    <h1 class="page-header-title">
+                        <div class="page-header-icon">NettiMuutto</div>
+                        > company > review
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</header>
+
+<div class="container-xl px-4">
+    <div class="card mb-4 py-3">
+        <div class="row">
+            <!-- offer item -->
+            <div class="d-lg-flex d-md-block align-items-center justify-content-around">
+
+                <div class="col-md-3  text-center card-icon-aside">
+                    <img class="img-fluid rounded company-offer-img"
+                        src="{{company_profile.image.url}}" />
+                </div>
+                <div class="col-md-4  justify-content-between text-center">
+                    <a class="h3 fw-bold text-decoration-none"
+                        href="#">{{company_profile.name}}</a>
+                    <div class="text-xs text-muted mt-2">
+                        <div>
+                            {% with rating=company_profile.rate %}
+                                    {% for i in "12345" %}
+                                        {% if i|add:'0' < rating %}
+                                            <span class="fa fa-star checked"></span>
+                                        {% else %}
+                                            <span class="fa fa-star unchecked"></span>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {{ rating }}/5
+                                {% endwith %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 text-center">
+            
+                    <div class="text-s mt-2">
+                        <span class="fw-bold">Established date: </span>
+                        <span>{{company_profile.established_date|date:"Y-m-d"}}</span>
+                    </div>
+                    <div class="text-s  mt-2">
+                        <span class="fw-bold">Serial number: </span>
+                        <span>{{company_profile.serial_number}}</span>
+                    </div>
+
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="row my-5">
+                        {% for service_type in company_profile.service_types %}
+                        <span class="service-type service-type-{{service_type}}"></span>
+
+                        {% endfor %}
+                    </div>
+                </div>
+
+               
+            </div>
+
+        </div>
+    </div>
+    <div class="card mb-4">
+        <form method="post" action="#">
+            <div class="card-header">Basic Information Edit</div>
+            <div class="card-body">
+                {% csrf_token %}
+                <input hidden name="email" value="{{order.email}}">
+                <input hidden name="company" value="{{company_profile.user.id}}">
+                <div class="row ">
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label for="id_rating">Rate:</label>
+                            <!-- Dropdown selection for rating -->
+                            <select id="id_rating" class="form-select" name="rate">
+                                <option value="1">1 star</option>
+                                <option value="2">2 stars</option>
+                                <option value="3">3 stars</option>
+                                <option value="4">4 stars</option>
+                                <option value="5" selected>5 stars</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="id_description">Description:</label>
+                            <textarea name="description" id="summernote">{{order_form.instance.description}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-end">
+                <!-- <button class="btn btn-danger me-3" disabled>Cancel</button> -->
+                <button type="submit" class="btn btn-primary me-3">Submit</button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="card mb-4">
+        <div class="card-header">Advertisement</div>
+        <div class="card-body">
+
+            This compact page header example strips down the page header element to create a
+            seamless, slim page header.
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'plugins/summernote/summernote-lite.min.js' %}"></script>
+<script src="{% static 'plugins/summernote/summernote-init.js' %}"></script>
+{% endblock extra_js %}

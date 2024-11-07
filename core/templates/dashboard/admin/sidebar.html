@@ -1,0 +1,46 @@
+<!-- Sidenav Menu Heading (Core)-->
+<div class="sidenav-menu-heading">Core</div>
+<!-- Sidenav Accordion (Dashboard)-->
+<a class="nav-link collapsed" href="{% url 'dashboard:home' %}">
+    <div class="nav-link-icon"><i data-feather="activity"></i></div>
+    Dashboard
+
+</a>
+<!-- Sidenav Heading (Custom)-->
+<div class="sidenav-menu-heading">User Management</div>
+<!-- Sidenav Accordion (Pages)-->
+
+<a class="nav-link " href="{% url 'dashboard:admin:company-profile-list' %}">
+    <div class="nav-link-icon"><i data-feather="user"></i></div>
+    Companies
+</a>
+
+<!-- Sidenav Heading (Custom)-->
+<div class="sidenav-menu-heading">Support</div>
+<!-- Sidenav Accordion (Pages)-->
+<a class="nav-link " href="{% url 'dashboard:admin:ticket-list' %}">
+    <div class="nav-link-icon"><i data-feather="inbox"></i></div>
+    Tickets
+</a>
+
+<!-- Sidenav Heading (Custom)-->
+<div class="sidenav-menu-heading">Finances</div>
+<a class="nav-link " href="{% url 'dashboard:admin:invoice-list' %}">
+    <div class="nav-link-icon"><i data-feather="dollar-sign"></i></div>
+    Invoices
+</a>
+<a class="nav-link " href="#">
+    <div class="nav-link-icon"><i data-feather="bar-chart-2"></i></div>
+    Statics
+</a>
+
+<!-- Sidenav Heading (Custom)-->
+<div class="sidenav-menu-heading">Settings</div>
+<a class="nav-link " href="{% url 'dashboard:admin:profile-edit' %}">
+    <div class="nav-link-icon"><i data-feather="user"></i></div>
+    Profile
+</a>
+<a class="nav-link " href="{% url 'dashboard:admin:security-edit' %}">
+    <div class="nav-link-icon"><i data-feather="shield"></i></div>
+    security
+</a>

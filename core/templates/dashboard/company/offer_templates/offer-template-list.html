@@ -1,0 +1,47 @@
+{% extends 'dashboard/company/base.html' %}
+{% load static %}
+{% block title %}
+{% endblock title %}
+
+
+{% block content %}
+<div class="container-xl px-4">
+
+    <div class="row my-5">
+        {% for object in object_list %}
+        <div class="col-lg-4 mb-4">
+         
+            <!-- Knowledge base category card 1-->
+            <a class="card lift lift-sm h-100" href="{% url 'dashboard:company:offer-template-edit' pk=object.id %}">
+                <div class="card-body">
+                    <h5 class="card-title text-primary mb-2">
+                        {{object.get_title}}
+                    </h5>
+                    <p class="card-text mb-1">{{object.brief_description}}</p>
+                </div>
+                <div class="card-footer">
+                    <div class="small text-muted">{{object.created_date|date:"Y-m-d h:i"}}</div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+        <div class="col-lg-4 mb-4">
+            <!-- Knowledge base category card 1-->
+            <a class="card lift lift-sm h-100" href="{% url 'dashboard:company:offer-template-create' %}">
+                <div class="card-body rounded" style="background-color: rgba(33, 40, 50, 0.03);">
+                    <div class="row">
+
+                        <div class="jumbotron d-flex align-items-center" style="height:150px">
+                            <div class="container text-center">
+                                <img style="width: 50px;" src="{% static 'img/plus-sign.svg' %}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,131 @@
+{% extends 'emails/base.html' %}
+{% block content %}
+<p class="greeting">Hello, {{ fullname }}!</p>
+<div class="description-container">
+    <h2>Table of Order Contents</h2>
+
+    <h3>Order Basic Info</h3>
+    <table class="toc-table">
+        <tr>
+            <th>Field</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>First Name</td>
+            <td>{{order.first_name}}</td>
+        </tr>
+        <tr>
+            <td>Last Name</td>
+            <td>{{order.last_name}}</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>{{order.email}}</td>
+        </tr>
+        <tr>
+            <td>Phone Number</td>
+            <td>{{order.phone_number}}</td>
+        </tr>
+        <tr>
+            <td>Move Dates</td>
+            <td>{% for item in order.move_dates.all %}
+                <span>{{item.date|date:"Y-m-d"}}</span>
+                {% if not forloop.last %} , {% endif %}
+                {% endfor %}</td>
+        </tr>
+        <tr>
+            <td>Living Peoples</td>
+            <td>{{order.living_people}}</td>
+        </tr>
+
+        <!-- Add other Order Basic Info fields and descriptions -->
+    </table>
+    <div>
+        <h3>Description</h3>
+        <p>{{order.description|safe}}</p>
+
+    </div>
+    <br>
+    <h3>Order Origin</h3>
+    <table class="toc-table">
+        <tr>
+            <th>Field</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>Location Type</td>
+            <td>{{origin.get_location_type}}</td>
+        </tr>
+        <tr>
+            <td>Movement Choice</td>
+            <td>{{origin.get_moving_choice}}</td>
+        </tr>
+        <tr>
+            <td>Street</td>
+            <td>{{origin.street}}</td>
+        </tr>
+        <tr>
+            <td>Zip Code</td>
+            <td>{{origin.zip_code}}</td>
+        </tr>
+        <tr>
+            <td>City</td>
+            <td>{{origin.city}}</td>
+        </tr>
+        <tr>
+            <td>Floor</td>
+            <td>{{origin.floor}}</td>
+        </tr>
+        <tr>
+            <td>Has Elevator</td>
+            <td>{% if origin.has_elevator %} Yes {% else %} No {% endif %}</td>
+        </tr>
+        <tr>
+            <td>Apartment Size</td>
+            <td>{{origin.apartment_size}}</td>
+        </tr>
+        <!-- Add other Order Origin fields and descriptions -->
+    </table>
+
+    <h3>Order Destination</h3>
+    <table class="toc-table">
+        <tr>
+            <th>Field</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>Location Type</td>
+            <td>{{destination.get_location_type}}</td>
+        </tr>
+        <tr>
+            <td>Street</td>
+            <td>{{destination.street}}</td>
+        </tr>
+        <tr>
+            <td>Zip Code</td>
+            <td>{{destination.zip_code}}</td>
+        </tr>
+        <tr>
+            <td>City</td>
+            <td>{{destination.city}}</td>
+        </tr>
+        <tr>
+            <td>Floor</td>
+            <td>{{destination.floor}}</td>
+        </tr>
+        <tr>
+            <td>Has Elevator</td>
+            <td>{% if destination.has_elevator %} Yes {% else %} No {% endif %}</td>
+        </tr>
+        <!-- Add other Order Destination fields and descriptions -->
+    </table>
+</div>
+
+<br>
+Please do contact our support if you ever needed any help
+</p>
+<div class="button-container">
+    <a href="{{ protocol }}://{{ domain }}{% url 'dashboard:user:order-detail' uuid=order.uuid %}" class="button">Check
+        Order</a>
+</div>
+{% endblock %}

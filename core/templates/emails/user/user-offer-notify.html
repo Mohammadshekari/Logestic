@@ -1,0 +1,25 @@
+{% extends 'emails/base.html' %}
+{% block content %}
+<p class="greeting">Hello, {{ fullname }}!</p>
+<p class="description-container">
+    We're excited to share a special offer from a company. Take advantage of this exclusive opportunity:
+    <br>
+    {{ offer.description|safe }}
+</p>
+<div class="company-info">
+    <p>Company Name: {{company_profile.name}}</p>
+    <p>Rate: {{company_profile.rate}}/5 | <span class="star-rating">{% with rating=company_profile.rate %}
+            {% for i in "12345" %}
+            {% if i|add:'0' <= rating %} <span class="star-rating">&#9733;</span>
+        {% else %}
+        <span>&#9733;</span>
+        {% endif %}
+        {% endfor %}
+        {% endwith %}</span>
+    </p>
+</div>
+<div class="button-container">
+    <a href="{{ protocol }}://{{ domain }}{% url 'dashboard:user:order-offers-detail' uuid=order.uuid offer_id=offer.id %}" class="button">Check
+        Offer</a>
+</div>
+{% endblock %}

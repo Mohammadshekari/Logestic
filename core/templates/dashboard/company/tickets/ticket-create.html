@@ -1,0 +1,66 @@
+{% extends 'dashboard/company/base.html' %}
+{% load static %}
+{% block title %}
+{% endblock title %}
+
+{% block extra_css %}
+<link href="{% static 'plugins/summernote/summernote-lite.min.css' %}" rel="stylesheet" />
+{% endblock extra_css %}
+
+{% block content %}
+
+<div class="container-fluid my-5 px-4">
+    <form method="post" action="." class="row gx-4">
+        {% csrf_token %}
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header">Basic Info</div>
+                <div class="card-body row">
+                    <div class="col-md-8">
+                        <label class="small mb-1" for="inputTitle">Title</label>
+                        {{form.title}}
+                    </div>
+                    <!-- Form Group (location)-->
+                    <div class="col-md-4">
+                        <label class="small mb-1" for="inputType">Type</label>
+                        {{form.priority}}
+                    </div>
+                </div>
+
+            </div>
+            <div class="card card-header-actions mb-4" style="min-height:500px">
+                <div class="card-header">
+                    Description
+                </div>
+                <div class="card-body">
+                    <textarea name="description" id="summernote"></textarea>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-4">
+            <div class="card card-header-actions">
+                <div class="card-header">
+                    Publish
+
+                </div>
+                <div class="card-body">
+                    <div class="d-grid mb-3">
+                        <button class="fw-500 btn btn-primary ">Save</button>
+                    </div>
+                    <div class="d-grid">
+                        <a href="{% url 'dashboard:company:ticket-list' %}"
+                            class="fw-500 btn btn-outline-secondary">Back to list</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'plugins/summernote/summernote-lite.min.js' %}"></script>
+<script src="{% static 'plugins/summernote/summernote-init.js' %}"></script>
+
+{% endblock extra_js %}

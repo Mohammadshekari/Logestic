@@ -1,0 +1,244 @@
+{% extends 'dashboard/company/base.html' %}
+{% load static %}
+{% block title %}
+{% endblock title %}
+
+{% block extra_css %}
+<link href="{% static 'plugins/summernote/summernote-lite.min.css' %}" rel="stylesheet" />
+{% endblock extra_css %}
+
+{% block content %}
+
+
+<!-- Main page content-->
+<div class="container-xl px-4 mt-5">
+
+    <div class="row">
+        <div class="col-xl-4">
+            <form action="{% url 'dashboard:company:profile-image-edit' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- Profile picture card-->
+                <div class="card mb-4 mb-xl-0">
+                    <div class="card-header">Profile Picture</div>
+                    <div class="card-body text-center">
+                        <!-- Profile picture image-->
+                        <img class="img-account-profile rounded-circle mb-2" src="{{image_form.instance.image.url}}"
+                            alt="">
+                        <!-- Profile picture help block-->
+                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 1 MB</div>
+                        <!-- Profile picture upload button-->
+
+                        <div class="input-group mb-3">
+                            <input class="form-control" type="file" name="image" id="id_image"
+                                accept=" image/jpg,image/jpeg, image/png">
+                            <button class="btn btn-primary w-25" type="submit">Upload</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-xl-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <form action="{% url 'dashboard:company:profile-edit' %}" method="post">
+                    {% csrf_token %}
+
+                    <div class="card-header">Profile Details</div>
+                    <div class="card-body">
+                        <!-- Form Group (username)-->
+                        <div class="mb-3">
+                            <label class="small mb-1" for="inputName">Name</label>
+                            <input class="form-control" id="inputName" type="text" placeholder="Enter your company name"
+                                name="name" value="{{form.instance.name}}">
+                        </div>
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (first name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputPhoneNumber">Phone Number</label>
+                                <input class="form-control" id="inputPhoneNumber" type="text" name="phone_number"
+                                    placeholder="Enter your phone number" value="{{form.instance.phone_number}}">
+                            </div>
+                            <!-- Form Group (last name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputEmail">Email</label>
+                                <input class="form-control" id="inputEmail" type="email" placeholder="Enter your email"
+                                    name="email" value="{{form.instance.email}}">
+                            </div>
+                        </div>
+                        <!-- Form Row        -->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (organization name)-->
+                            <div class="col-md-4">
+                                <label class="small mb-1" for="inputSerialNumber">Serial Number</label>
+                                <input class="form-control" id="inputSerialNumber" type="text"
+                                    placeholder="Enter your companies serial number" name="serial_number"
+                                    value="{{form.instance.serial_number}}">
+                            </div>
+                            <!-- Form Group (organization name)-->
+                            <div class="col-md-4">
+                                <label class="small mb-1" for="inputTrafficPermit">Traffic Permit ID</label>
+                                <input class="form-control" id="inputTrafficPermit" type="text"
+                                    placeholder="Enter your companies serial number" name="traffic_permit_id"
+                                    value="{{form.instance.traffic_permit_id}}">
+                            </div>
+                            <!-- Form Group (location)-->
+                            <div class="col-md-4">
+                                <label class="small mb-1" for="inputLocation">Established Date</label>
+                                <input class="form-control" id="inputLocation" type="date" name="established_date"
+                                    value="{{form.instance.established_date|date:'Y-m-d'}}">
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-12">
+                                <label class="small mb-1" for="inputBirthday">Description</label>
+                                <textarea class="summernote" name="description">{{form.instance.description}}</textarea>
+
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (phone number)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputPhone">Services</label>
+                                {% for service in service_types %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="{{service.id}}"
+                                        name="services" {% if service.id in object.service_types %} checked {% endif %}>
+                                    <label class="form-check-label" for="service">
+                                        {{service.title}}
+                                    </label>
+                                </div>
+                                {% endfor %}
+
+                            </div>
+                            <!-- Form Group (birthday)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputBirthday">Payment Methods</label>
+                                {% for payment in payment_types %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="{{payment.id}}"
+                                        name="payments" {% if payment.id in object.payment_method_types %} checked {% endif %}>
+                                    <label class="form-check-label" for="service">
+                                        {{payment.title}}
+                                    </label>
+                                </div>
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-12">
+                                <label class="small mb-1" for="inputBirthday">Payment Description</label>
+                                <textarea class="summernote"
+                                    name="payment_description">{{form.instance.payment_description}}</textarea>
+
+                            </div>
+                        </div>
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-12">
+                                <label class="small mb-1" for="inputBirthday">Company Location</label>
+                                <input type="hidden" name="location_point" id="location_point">
+                                <div style="max-width:1000px; width:100%;height:400px" id="map"></div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="card-footer">
+
+                        <!-- Save changes button-->
+                        <button class="btn btn-primary" type="submit">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{object.get_latlng}}
+
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'plugins/summernote/summernote-lite.min.js' %}"></script>
+<script src="{% static 'plugins/summernote/summernote-init.js' %}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_MAP_API_TOKEN}}"></script>
+<script>
+    var current_location = `{{object.get_latlng|default:"null"|safe}}`;
+    current_location = JSON.parse(current_location)
+    console.log(current_location)
+    var marker = null;
+    var map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: -34.397, lng: 150.644 },
+        zoom: 8,
+    });
+
+    function handleLocationError(browserHasGeolocation, pos) {
+        console.log(
+            browserHasGeolocation
+                ? "Error: The Geolocation service failed."
+                : "Error: Your browser doesn't support geolocation."
+        );
+        // Optionally display an error message on the map or the UI
+    }
+    // Try HTML5 geolocation.
+    //
+    //if (navigator.geolocation) {
+    //    navigator.geolocation.getCurrentPosition(
+    //        (position) => {
+    //            const userLocation = {
+    //                lat: position.coords.latitude,
+    //                lng: position.coords.longitude,
+    //            };
+    //
+    //            // Set the map's center to the user's location
+    //            map.setCenter(userLocation);
+    //            map.setZoom(12);
+    //
+    //            // Optional: Add a marker at the user's location
+    //            marker = new google.maps.Marker({
+    //                position: userLocation,
+    //                map: map,
+    //            });
+    //        },
+    //        () => {
+    //            handleLocationError(true, map.getCenter());
+    //        }
+    //    );
+    //} else {
+    //    // Browser doesn't support Geolocation
+    //    handleLocationError(false, map.getCenter());
+    //}
+    if (current_location){
+        marker = new google.maps.Marker({
+            position: current_location,
+            map: map,
+        });
+        map.setCenter(current_location);
+        map.setZoom(8);
+    }
+
+    google.maps.event.addListener(map, "click", (event) => {
+        if (marker) {
+            marker.setMap(null);
+        }
+        //map.setCenter(event.latLng);
+        //map.setZoom(12);
+        marker = new google.maps.Marker({
+            position: event.latLng,
+            map: map,
+        });
+         // Create GeoJSON Point object
+        const geoJsonPoint = {
+            type: "Point",
+            coordinates: [event.latLng.lat(),event.latLng.lng() ],
+        };
+
+        // Set the GeoJSON Point object as the value of the input field
+        const locationPointInput = document.getElementById("location_point");
+        locationPointInput.value = JSON.stringify(geoJsonPoint);
+    });
+
+</script>
+{% endblock extra_js %}

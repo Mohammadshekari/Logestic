@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .greeting {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        .description-container {
+            margin-top: 20px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .company-info {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .star-rating {
+            color: #FFD700;
+            /* Gold color for stars */
+        }
+
+        .button-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .signature {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .logo {
+            max-width: 100%; /* Adjust the maximum width as needed */
+        }
+        .toc {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .toc h2 {
+            color: #007BFF;
+        }
+
+        .toc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .toc-table th, .toc-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .toc-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        {% block content %}
+        {% endblock %}
+        <div class="signature">
+            <p>Best regards,<br>Your Website Name</p>
+            <p>Visit our website: <a href="https://example.com">{{ protocol }}://{{ domain }}</a></p>
+            <p>Contact us: +1 234 567 890</p>
+            <img src="{{protocol}}://{{domain}}{% static 'img/logo-example.png' %}" alt="Your Logo" class="logo">
+        </div>
+    </div>
+</body>
+
+</html>

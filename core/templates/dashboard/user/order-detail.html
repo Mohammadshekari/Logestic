@@ -1,0 +1,578 @@
+{% extends 'dashboard/user/base.html' %}
+{% load static %}
+
+{% block title %}
+Order Details
+{% endblock title %}
+
+{% block extra_css %}
+<link href="{% static 'plugins/summernote/summernote-lite.min.css' %}" rel="stylesheet" />
+{% endblock extra_css %}
+
+
+{% block content %}
+
+<header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
+    <div class="container-xl px-4">
+        <div class="page-header-content">
+            <div class="row align-items-center justify-content-between pt-3">
+                <div class="col-auto mb-3">
+                    <h1 class="page-header-title">
+                        <div class="page-header-icon">NettiMuutto</div>
+                        > Order #{{order.pk}} > detail
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</header>
+
+<div class="container-xl px-4">
+    <div class="card card-icon mb-4">
+        <div class="row g-0">
+            <div class="col-auto card-icon-aside"> <img class="w-100 rounded"
+                    src="{% static 'img/logistic/furniture.jpg' %}"></div>
+            <div class="col">
+                <div class="card-body py-5">
+                    <h5 class="card-title">Your offer will be seen!</h5>
+                    <p class="card-text text-justify">Your offer request has been forwarded to more than 400 moving
+                        companies we will
+                        send you an email when you receive offers, so please keep an eye on your inbox.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">Next Steps of the competition</div>
+        <div class="card-body">
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Step 1: Request for quotation information
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <p>Your quote request has been forwarded to the moving companies, but you can still refine
+                                the information if necessary</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Step 2: Choose a moving company
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <p>You have received {{offers_total}} offers so far.Read the offers, read the reviews of the
+                                moving
+                                companies and choose the most suitable one.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Step 3: Rate the moving company
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <p>Congratulations on your new home! Now is a good time to review the moving company you
+                                have chosen.You will receive a review link in your email after the moving day.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-header-actions mb-4">
+        <div class="card-header">
+            Order details
+            {% if not order.is_done %}
+            <a href="{% url 'dashboard:user:order-edit' uuid=order.uuid %}" class="btn btn-sm btn-primary"
+                type="button">Edit the Order</a>
+            {% endif %}
+        </div>
+
+
+
+        <div class="row">
+
+            <div class="col-md-4 mb-4">
+                <div class="card-body row">
+                    <h4 class="card-title">Basic Information</h4>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">First name:</span>
+                        <span class="text-dark">{{order.first_name}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Last name:</span>
+                        <span class="text-dark">{{order.last_name}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Email:</span>
+                        <span class="text-dark">{{order.email}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Phone Number:</span>
+                        <span class="text-dark">{{order.phone_number}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Living People:</span>
+                        <span class="text-dark">{{order.living_people}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Move Dates:</span>
+                    </div>
+                    <div class="row">
+                        {% for item in order.move_dates.all %}
+                        <div class="col-3">
+                            <span class="badge bg-light text-dark">{{item.date|date:"Y-m-d"}}</span>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card-body row">
+                    <h4 class="card-title">Origin Details</h4>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Location Type: </span>
+                        <span class="text-dark">{{order_origin.get_location_type_display}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Movement Choice: </span>
+                        <span class="text-dark">{{order_origin.get_moving_choice_display}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Street: </span>
+                        <span class="text-dark">{{order_origin.street}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Zip Code: </span>
+                        <span class="text-dark">{{order_origin.zip_code}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">City:</span>
+                        <span class="text-dark">{{order_origin.city}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Floor: </span>
+                        <span class="text-dark">{{order_origin.floor}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Has Elevator: </span>
+                        <span class="text-dark">
+                            {% if order_origin.has_elevator %} Yes {% else %} No {% endif %}
+
+                        </span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Apartment Size: </span>
+                        <span class="text-dark">{{order_origin.apartment_size}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card-body row">
+                    <h4 class="card-title">Destination Details</h4>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Location Type: </span>
+                        <span class="text-dark">{{order_destination.get_location_type_display}}</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Street: </span>
+                        <span class="text-dark">{{order_destination.street}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Zip Code: </span>
+                        <span class="text-dark">{{order_destination.zip_code}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">City:</span>
+                        <span class="text-dark">{{order_destination.city}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Floor: </span>
+                        <span class="text-dark">{{order_destination.floor}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1">
+                        <span class="fw-bold">Has Elevator: </span>
+                        <span class="text-dark">
+                            {% if order_destination.has_elevator %} Yes {% else %} No {% endif %}
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="card-body">
+            <h4 class="card-title">Description</h4>
+            <p class="my-3">{{order.description|safe}}</p>
+        </div>
+
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">A Movers Checklist</div>
+                <div class="card-body">
+                    <p>
+                        A checklist is an easy way to reduce stress and ensure that all moving chores are done without
+                        any
+                        issues.
+                    </p>
+                    <p>
+                        All the things you can do to make your order more valuable and making it have more companies
+                        visit.
+                    </p>
+                </div>
+                <div class="card-footer float-right"><a href="#" class="btn btn-primary">Check The List</a></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Pictures</div>
+                <div class="card-body">
+                    <div class="card-text">
+
+                        Avoid surprise costs by attaching photos to your quote that help the moving company to estimate
+                        the
+                        amount of work.
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="d-flex align-items-center justify-content-start">
+                            {% for picture in order_pictures %}
+                            <div class="col-md-2 mb-1">
+                                <img class="card-img ms-1" src="{{picture.file.url}}" alt="..."
+                                    style="width: 100%; max-width:100px; height: 100px; object-fit:cover">
+                            </div>
+                            {% empty %}
+                            <p> No Images Yet</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+                {% if not order.is_done %}
+                <div class="card-footer float-right"><a href="{% url 'dashboard:user:order-pictures' uuid=order.uuid %}"
+                        class="btn btn-primary">Add Pictures</a></div>
+                    {% endif %}
+            </div>
+        </div>
+    </div>
+    {% if accepted_offer %}
+    <div class="card mb-4">
+        <div class="card-header">
+            Accepted Offer
+
+        </div>
+        <div class="card-body px-0">
+
+            <div class="row">
+                <!-- offer item -->
+                <div class="d-lg-flex d-md-block align-items-center justify-content-around">
+
+                    <div class="col-md-2  text-center card-icon-aside">
+                        <img class="img-fluid rounded company-offer-img"
+                            src="{{accepted_offer.offer.user.company_profile.image.url}}" />
+                    </div>
+                    <div class="col-md-3  justify-content-between text-center">
+                        <a href="{% url 'dashboard:user:company-profile-preview' pk=accepted_offer.offer.user.company_profile.pk %}"
+                            class="h3 fw-bold text-decoration-none">{{accepted_offer.offer.user.company_profile.name}}</a>
+                        <div class="text-xs text-muted mt-2">
+                            <div>
+                                {% with rating=accepted_offer.offer.user.company_profile.rate %}
+                                    {% for i in "12345" %}
+                                        {% if i|add:'0' <= rating %}
+                                            <span class="fa fa-star checked"></span>
+                                        {% else %}
+                                            <span class="fa fa-star unchecked"></span>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {{ rating }}/5
+                                {% endwith %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center">
+             
+                        <div class="text-s mt-2">
+                            <span class="fw-bold">Established date: </span>
+                            <span>{{accepted_offer.offer.user.company_profile.established_date|date:"Y-m-d"}}</span>
+                        </div>
+                        <div class="text-s  mt-2">
+                            <span class="fw-bold">Serial number: </span>
+                            <span>{{accepted_offer.offer.user.company_profile.serial_number}}</span>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-2 text-center">
+                        <div class="d-flex justify-content-center my-5">
+                            {% for service_type in accepted_offer.offer.user.company_profile.service_types %}
+                            <span class="service-type service-type-{{service_type}} "></span>
+
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        {% if not order.is_done %}
+                        <div class="d-flex justify-content-center mb-3">
+
+                            <button class="btn  btn-outline-danger " type="button" data-bs-toggle="modal"
+                                data-bs-target="#cancelOfferModal">
+                                Cancel company offer</button>
+                        </div>
+                        <div class="d-flex justify-content-center mb-3">
+
+                            <button class="btn  btn-primary" type="button" data-bs-toggle="modal"
+                                data-bs-target="#closeOrderModal">Order is Satisfied</button>
+
+                        </div>
+                        {% endif %}
+                        <!-- <div class="d-flex justify-content-center mb-3">
+                            <a class="btn btn-secondary " href="#">Start Conversation</a>
+                        </div> -->
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="card-body">
+            {{accepted_offer.offer.description|safe}}
+        </div>
+
+    </div>
+    <div class="card mb-4">
+        <div class="card-header d-flex align-items-center">
+
+            Conversations
+
+        </div>
+        <div class="card-body">
+            {% for message in messages_query %}
+            <div class="d-sm-flex border rounded-3 p-3">
+                <div>
+                    <div class="mb-3 d-sm-flex justify-content-sm-between align-items-center ">
+                        <!-- Title -->
+                        <div>
+                            <h5 class="m-0">{{message.get_username}} - {{message.get_user_type}}
+                            </h5>
+                            <span class="me-3 small">
+                                <td class="text-center text-sm-start"> {{object.created_date|date:"Y-m-d h:i"}} </td>
+                            </span>
+                        </div>
+                    </div>
+                    <p>{{message.description|safe}}</p>
+
+                </div>
+            </div>
+            {% if not forloop.last %}
+            <hr>
+            {% endif %}
+            {% empty %}
+            <div class="justify-content-center text-center"><span>There are no messages at the moment</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% if not order.is_done %}
+    <div class="card mb-4">
+        <div class="card-header">Send Message</div>
+        <div class="card-body">
+
+            <form method="post"
+                action="{% url 'dashboard:user:offer-send-message' uuid=object.uuid offer_id=accepted_offer.offer.id %}"
+                class="row g-3 position-relative">
+                {% csrf_token %}
+                <!-- Comment -->
+                <div class="col-12">
+                    <textarea name="description" id="summernote"></textarea>
+                </div>
+
+
+                <div class="col-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary mb-0">submit</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="card card-header-actions mb-4">
+        <div class="card-header">
+            Top 5 Latest offers
+            <a href="{% url 'dashboard:user:order-offers-list' uuid=order.uuid %}" class="btn btn-sm btn-primary"
+                type="button">See all Offers</a>
+        </div>
+        <div class="card-body px-0">
+            {% for offer in latest_offers %}
+            <div class="row {% if not forloop.last %} border-bottom {% endif %}">
+                <!-- offer item -->
+                <div class="d-lg-flex d-md-block align-items-center justify-content-around">
+
+                    <div class="col-md-2  text-center card-icon-aside">
+                        <img class="img-fluid rounded company-offer-img"
+                            src="{{offer.user.company_profile.image.url}}" />
+                    </div>
+                    <div class="col-md-3  justify-content-between text-center">
+                        <a href="{% url 'dashboard:user:company-profile-preview' pk=offer.user.company_profile.pk %}"
+                            class="h3 fw-bold text-decoration-none">{{offer.user.company_profile.name}}</a>
+                        <div class="text-xs text-muted mt-2">
+                            <div>
+                                {% with rating=offer.user.company_profile.rate %}
+                                {% for i in "12345" %}
+                                {% if i|add:'0' <= rating %} <span class="fa fa-star checked"></span>
+                                    {% else %}
+                                    <span class="fa fa-star unchecked"></span>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {{ rating }}/5
+                                    {% endwith %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center">
+             
+                        <div class="text-s mt-2">
+                            <span class="fw-bold">Established date: </span>
+                            <span>{{offer.user.company_profile.established_date|date:"Y-m-d"}}</span>
+                        </div>
+                        <div class="text-s  mt-2">
+                            <span class="fw-bold">Serial number: </span>
+                            <span>{{offer.user.company_profile.serial_number}}</span>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-2 text-center">
+                        <div class="d-flex justify-content-center my-5">
+                            {% for service_type in object.user.company_profile.service_types %}
+                            <span class="service-type service-type-{{service_type}} "></span>
+
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="d-flex justify-content-center">
+                            <a class="btn btn-primary "
+                                href="{% url 'dashboard:user:order-offers-detail' uuid=order.uuid offer_id=offer.pk %}">Read
+                                offer</a>
+                        </div>
+                        <div class="text-xs text-center">
+                            <span class="text-mute">{{offer.created_date|date:"Y-m-d h:i"}}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {% empty %}
+            <div class="row ">
+                <!-- offer item -->
+                <div class="d-lg-flex d-md-block align-items-center justify-content-around">
+                    No Offers yet
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    {% endif %}
+
+
+    <div class="card mb-4">
+        <div class="card-header">Advertisement</div>
+        <div class="card-body">
+
+            This compact page header example strips down the page header element to create a
+            seamless, slim page header.
+        </div>
+    </div>
+</div>
+
+{% if accepted_offer %}
+<div class="modal fade" id="closeOrderModal" tabindex="-1" role="dialog" aria-labelledby="closeOrderModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form
+                action="{% url 'dashboard:user:order-close' uuid=order.uuid  %}"
+                method="post">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="closeOrderModalLabel">Is your Order Satisfied?</h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    You can make this order be closed by simply clicking on close the order, which means this order is
+                    done
+                    and you can leave your review for the company which did the job.
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary" type="submit">Close The Order
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="cancelOfferModal" tabindex="-1" role="dialog" aria-labelledby="cancelOfferModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form
+                action="{% url 'dashboard:user:order-offers-cancel' uuid=order.uuid offer_id=accepted_offer.offer.pk %}"
+                method="post">
+                {% csrf_token %}
+
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelOfferModalLabel">Cancel Order</h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Do you want really want to cancel the company offer?
+                    if you do that your order will be reset and will be placed as a new order, and all the offers will
+                    be
+                    also gone.
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-danger" type="submit">Proceed
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'plugins/summernote/summernote-lite.min.js' %}"></script>
+<script src="{% static 'plugins/summernote/summernote-init.js' %}"></script>
+
+{% endblock extra_js %}

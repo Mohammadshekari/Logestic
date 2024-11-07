@@ -1,0 +1,325 @@
+{% extends 'dashboard/company/base.html' %}
+{% load static %}
+{% block title %}
+{% endblock title %}
+
+{% block extra_css %}
+<link href="{% static 'plugins/summernote/summernote-lite.min.css' %}" rel="stylesheet" />
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container-xl px-4 mt-5">
+    <!-- Knowledge base article-->
+    <div class="card mb-4">
+        <div class="card-header d-flex align-items-center">
+            <a class="btn btn-transparent-dark btn-icon" href="{% url 'dashboard:company:order-list' %}"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-arrow-left">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg></a>
+            <div class="ms-3">
+                <h2 class="my-3">Order #{{order.id}}</h2>
+                <small class="text-mute">{{order.created_date|date:"Y-m-d h:i"}}</small>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="border-bottom">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card-body row">
+                            <h4 class="card-title">Basic Information</h4>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">First name:</span>
+                                <span class="text-dark">{{order.first_name}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Last name:</span>
+                                <span class="text-dark">{{order.last_name}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Email:</span>
+                                <span class="text-dark">{{order.email}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Phone Number:</span>
+                                <span class="text-dark">{{order.phone_number}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Living People:</span>
+                                <span class="text-dark">{{order.living_people}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Move Dates:</span>
+                            </div>
+                            <div class="row">
+                                {% for item in order.move_dates.all %}
+                                <div class="col-3">
+                                    <span class="badge bg-light text-dark">{{item.date|date:"Y-m-d"}}</span>
+                                </div>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card-body row">
+                            <h4 class="card-title">Origin Details</h4>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Location Type: </span>
+                                <span class="text-dark">{{order_origin.get_location_type_display}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Movement Choice: </span>
+                                <span class="text-dark">{{order_origin.get_moving_choice_display}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Street: </span>
+                                <span class="text-dark">{{order_origin.street}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Zip Code: </span>
+                                <span class="text-dark">{{order_origin.zip_code}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">City:</span>
+                                <span class="text-dark">{{order_origin.city}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Floor: </span>
+                                <span class="text-dark">{{order_origin.floor}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Has Elevator: </span>
+                                <span class="text-dark">
+                                    {% if order_origin.has_elevator %} Yes {% else %} No {% endif %}
+
+                                </span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Apartment Size: </span>
+                                <span class="text-dark">{{order_origin.apartment_size}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card-body row">
+                            <h4 class="card-title">Destination Details</h4>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Location Type: </span>
+                                <span class="text-dark">{{order_destination.get_location_type_display}}</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Street: </span>
+                                <span class="text-dark">{{order_destination.street}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Zip Code: </span>
+                                <span class="text-dark">{{order_destination.zip_code}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">City:</span>
+                                <span class="text-dark">{{order_destination.city}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Floor: </span>
+                                <span class="text-dark">{{order_destination.floor}}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-1">
+                                <span class="fw-bold">Has Elevator: </span>
+                                <span class="text-dark">
+                                    {% if order_destination.has_elevator %} Yes {% else %} No {% endif %}
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="card-body border-bottom">
+                <h4 class="card-title">Order Description</h4>
+                {{ order.description|safe }}
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <h4 class="card-title">Order Images</h4>
+                    <div class="d-flex justify-content-start">
+                        {% for picture in order_pictures %}
+                        <div class="col-md-2 mb-1">
+                            <img class="card-img ms-1" src="{{picture.file.url}}" alt="..."
+                                style="width: 100%; max-width:100px; height: 100px; object-fit:cover">
+                        </div>
+                        {% empty %}
+                        <p> No Images Yet</p>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">
+
+            <h2 class="my-3">Distance On Map <span id="distance-on-map"></span></h2>
+
+            <div style="max-width:1800px; width:100% !important; height:400px" id="map"></div>
+
+        </div>
+    </div>
+
+    {% if offer %}
+    <div class="card mb-4">
+        <div class="card-header d-flex align-items-center">
+            <div class="ms-3">
+                <h2 class="my-3">Offer Description</h2>
+                <small class="text-mute">Offered at: {{offer.created_date|date:"Y-m-d h:i"}}</small>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="m-3">{{offer.description|safe}}</div>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="card card-collapsable">
+        <a class="card-header collapsed" href="#collapseOffer" data-bs-toggle="collapse" role="button"
+            aria-expanded="false" aria-controls="collapseOffer">
+            Set your Offer
+            <div class="card-collapsable-arrow"><svg class="svg-inline--fa fa-chevron-down fa-w-14" aria-hidden="true"
+                    focusable="false" data-prefix="fas" data-icon="chevron-down" role="img"
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+                    <path fill="currentColor"
+                        d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z">
+                    </path>
+                </svg><!-- <i class="fas fa-chevron-down"></i> Font Awesome fontawesome.com --></div>
+        </a>
+        <div class="collapse" id="collapseOffer" style="">
+            <form id="offer-form" method="post" action="{% url 'dashboard:company:order-create-offer' pk=order.pk %}">
+                <div class="card-body">
+                    {% csrf_token %}
+                    <div class="row gx-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="small mb-1" for="inputTemlplate">Template</label>
+                            <select class="form-select" aria-label="Default select example" id="template-offers">
+                                <option selected value="">Choose a template</option>
+                                {% for template in offer_templates %}
+                                <option value="{{template.id}}">{{template.get_title}}</option>
+
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="small mb-1" for="inputPrice">Price</label>
+                            <input class="form-control" id="inputPrice" type="number" name="price"
+                                placeholder="Enter your base price ">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small mb-1">Description</label>
+                        <textarea name="description" id="summernote"></textarea>
+                    </div>
+
+                </div>
+                <div class="card-footer"><button class="btn btn-primary">submit</button></div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'plugins/summernote/summernote-lite.min.js' %}"></script>
+<script src="{% static 'plugins/summernote/summernote-init.js' %}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_MAP_API_TOKEN}}"></script>
+<script>
+    $('#template-offers').on('change', function () {
+        if (this.value) {
+            url = `/dashboard/company/offer-template/${this.value}/detail/json`
+            $.get(url, function (data) {
+                $('#summernote').summernote('reset');
+                $('#summernote').summernote('pasteHTML', data.description);
+            });
+        }
+
+    });
+</script>
+<script>
+    let map;
+    let directionsService;
+    let directionsRenderer;
+
+    function initMap() {
+        // Initialize the map
+        map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 7,
+            center: { lat: -34.397, lng: 150.644 }
+        });
+
+        // Initialize the directions service and renderer
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer();
+        directionsRenderer.setMap(map);
+
+        // Define the start and end points
+
+
+
+        const start = JSON.parse(`{{ order_origin.get_latlng|safe}}`);
+        const end = JSON.parse(`{{ order_destination.get_latlng|safe}}`);
+
+        // Place markers on the map
+        new google.maps.Marker({
+            position: start,
+            map: map,
+            title: "Origin"
+        });
+
+        new google.maps.Marker({
+            position: end,
+            map: map,
+            title: "Destination"
+        });
+
+        // Calculate and display the route
+        calculateAndDisplayRoute(start, end);
+    }
+
+    function calculateAndDisplayRoute(start, end) {
+        directionsService.route(
+            {
+                origin: start,
+                destination: end,
+                travelMode: google.maps.TravelMode.DRIVING
+            },
+            (response, status) => {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    directionsRenderer.setDirections(response);
+
+                    // Display the distance
+                    const distance = response.routes[0].legs[0].distance.text;
+                    console.log(`Distance: ${distance}`);
+
+                    // Optionally, you can display the distance on the webpage
+                    const distanceElement = document.getElementById('distance-on-map');
+                    distanceElement.innerHTML = `(${distance})`;
+                } else {
+                    window.alert("Directions request failed due to " + status);
+                }
+            }
+        );
+    }
+
+    // Initialize the map when the window loads
+    window.onload = initMap;
+</script>
+{% endblock extra_js %}

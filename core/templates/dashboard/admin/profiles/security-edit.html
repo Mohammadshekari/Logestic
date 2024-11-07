@@ -1,0 +1,61 @@
+{% extends 'dashboard/admin/base.html' %}
+{% load static %}
+{% block title %}
+{% endblock title %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+
+
+<!-- Main page content-->
+<div class="container-xl px-4 mt-5">
+
+    <div class="row">
+        <div class="col-xl-12">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <form action="." method="post">
+                    {% csrf_token %}
+
+                    <div class="card-header">Security Edit</div>
+                    <div class="card-body">
+
+                        <div class="row gx-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputOldPassword">Old Password</label>
+                                {{form.old_password}}
+                            </div>
+                        </div>
+
+                        <div class="row gx-3 mb-3">
+
+                            <div class="col-md-6 mb-3">
+                                <label class="small mb-1" for="inputNewPassword1">New Password</label>
+                                {{form.new_password1}}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="small mb-1" for="inputNewPassword2">New Password Repeat</label>
+                                {{form.new_password2}}
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="card-footer">
+
+                        <!-- Save changes button-->
+                        <button class="btn btn-primary" type="submit">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+
+{% endblock extra_js %}

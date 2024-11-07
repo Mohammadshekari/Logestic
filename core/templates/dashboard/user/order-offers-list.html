@@ -1,0 +1,182 @@
+{% extends 'dashboard/user/base.html' %}
+{% load static %}
+
+{% block title %}
+Offers List
+{% endblock title %}
+
+{% block extra_css %}
+<style>
+    .checked {
+        color: yellow;
+        font-size: 20px;
+    }
+
+    .unchecked {
+        font-size: 20px;
+    }
+</style>
+{% endblock extra_css %}
+
+
+{% block content %}
+
+<header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
+    <div class="container-xl px-4">
+        <div class="page-header-content">
+            <div class="row justify-content-between pt-3">
+                <div class="col-auto mb-3">
+                    <h1 class="page-header-title">
+                        <div class="page-header-icon">NettiMuutto</div>
+                        > Order #{{order.pk}} > Offers list
+                    </h1>
+                </div>
+                <div class="col-auto mb-3">
+                    <a href="{% url 'dashboard:user:order-detail' uuid=order.uuid %}"
+                        class="btn btn-sm btn-primary me-2">Back to order detail</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container-xl px-4 mt-4">
+    <!-- Knowledge base home header option-->
+    <header class="card card-waves">
+        <div class="card-body px-5 pt-5 pb-0">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-lg-6">
+                    <h1 class="text-primary">Choose the right Offer for your needs</h1>
+                    <p class="lead mb-4">Search all the offers you see and find the prefect match!</p>
+                    <div class="shadow rounded">
+                        <form>
+                            <div class="input-group input-group-joined input-group-joined-xl border-0">
+
+                                <input class="form-control me-0" type="text" placeholder="Search..." aria-label="Search"
+                                    name="q" autofocus="">
+
+                                <span class="input-group-text"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-search">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-4"><img class="img-fluid" src="{% static 'img/illustrations/problem-solving.svg' %}">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <hr class=" my-5">
+
+    <div class="container mt-5">
+        {% for object in object_list %}
+        <div class="card mb-4 py-3">
+            <div class="row">
+                <!-- offer item -->
+                <div class="d-lg-flex d-md-block align-items-center justify-content-around">
+
+                    <div class="col-md-2  text-center card-icon-aside">
+                        <img class="img-fluid rounded company-offer-img"
+                            src="{{object.user.company_profile.image.url}}" />
+                    </div>
+                    <div class="col-md-3  justify-content-between text-center">
+                        <a class="h3 fw-bold text-decoration-none"
+                            href="{% url 'dashboard:user:company-profile-preview' pk=object.user.company_profile.pk %}">{{object.user.company_profile.name}}</a>
+                        <div class="text-xs text-muted mt-2">
+                            <div>
+                                {% with rating=object.user.company_profile.rate %}
+                                {% for i in "12345" %}
+                                {% if i|add:'0' <= rating %} <span class="fa fa-star checked"></span>
+                                    {% else %}
+                                    <span class="fa fa-star unchecked"></span>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {{ rating }}/5
+                                    {% endwith %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center">
+            
+                        <div class="text-s mt-2">
+                            <span class="fw-bold">Established date: </span>
+                            <span>{{object.user.company_profile.established_date|date:"Y-m-d"}}</span>
+                        </div>
+                        <div class="text-s  mt-2">
+                            <span class="fw-bold">Serial number: </span>
+                            <span>{{object.user.company_profile.serial_number}}</span>
+                        </div>
+
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <div class="d-flex justify-content-center my-5">
+                            {% for service_type in object.user.company_profile.service_types %}
+                            <span class="service-type service-type-{{service_type}} "></span>
+
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="d-flex justify-content-center">
+                            <a class="btn btn-primary "
+                                href="{% url 'dashboard:user:order-offers-detail' uuid=order.uuid offer_id=object.pk %}">Read
+                                offer</a>
+                        </div>
+                        <div class="text-xs text-center">
+                            <span class="text-mute">{{object.created_date|date:"Y-m-d h:i"}}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+        <div class="card mb-4 py-3">
+            <div class="row">
+                <!-- offer item -->
+                <div class="d-lg-flex d-md-block align-items-center justify-content-around">
+                    No offers yet
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% if page_obj.has_other_pages %}
+    <div class="container mt-5">
+        <div class="d-flex">
+            <div class="text-center justify-content-center">
+
+                <div aria-label="Offers Pagination">
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link"
+                                href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                        {% endif %}
+                        {% for i in page_obj.paginator.page_range %}
+                        {% if page_obj.number == i %}
+                        <li class="page-item mb-0 active"><a class="page-link " href="#">{{i}}</a></li>
+                        {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %} <li
+                            class="page-item mb-0 "><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                            {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                            <li class="page-item"><a class="page-link"
+                                    href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                            {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}

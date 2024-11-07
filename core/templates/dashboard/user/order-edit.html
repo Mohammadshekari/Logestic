@@ -1,0 +1,360 @@
+{% extends 'dashboard/user/base.html' %}
+{% load static %}
+
+{% block title %}
+Order Edit
+{% endblock title %}
+
+
+{% block extra_css %}
+<link href="{% static 'plugins/summernote/summernote-lite.min.css' %}" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+{% endblock extra_css %}
+
+
+{% block content %}
+
+<header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
+    <div class="container-xl px-4">
+        <div class="page-header-content">
+            <div class="row align-items-center justify-content-between pt-3">
+                <div class="col-auto mb-3">
+                    <h1 class="page-header-title">
+                        <div class="page-header-icon">NettiMuutto</div>
+                        > Order #{{order_form.instance.pk}} > edit
+                    </h1>
+                </div>
+                <div class="col-auto mb-3">
+                    <a href="{% url 'dashboard:user:order-detail' uuid=order_form.instance.uuid %}"
+                        class="btn btn-sm btn-primary me-2">Back to order detail</a>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</header>
+
+<div class="container-xl px-4">
+    <div class="card mb-4">
+        <form method="post" action="{% url 'dashboard:user:order-edit-basic-info' uuid=order_form.instance.uuid %}">
+            <div class="card-header">Basic Information Edit</div>
+            <div class="card-body">
+                {% csrf_token %}
+                <div class="row ">
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label for="id_first_name">First name:</label>
+                            <input type="text" name="first_name" maxlength="255" class="form-control" id="id_first_name"
+                                value="{{order_form.instance.first_name}}">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label for="id_last_name">Last name:</label>
+                            <input type="text" name="last_name" maxlength="255" class="form-control" id="id_last_name"
+                                value="{{order_form.instance.last_name}}">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label for="id_email">Email:</label>
+                            <input type="email" name="email" maxlength="254" class="form-control" id="id_email"
+                                value="{{order_form.instance.email}}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label for="id_phone_number">Phone number:</label>
+                            <input type="text" name="phone_number" maxlength="20" required="" class="form-control"
+                                id="id_phone_number" value="{{order_form.instance.phone_number}}">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label for="id_living_people">Living people:</label>
+                            <input type="number" name="living_people" required="" class="form-control"
+                                id="id_living_people" value="{{order_form.instance.living_people}}">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label for="id_move_dates">Move dates:</label>
+                            <input class="form-control" name="move_dates" value="{% for item in order_form.instance.move_dates.all %} {{item.date|date:'Y-m-d'}} {% if not forloop.last %}, {% endif %} {% endfor %}" type="text" id="datePicker" placeholder="Select a date">
+                    
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="id_description">Description:</label>
+                            <textarea name="description" id="summernote">{{order_form.instance.description}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-end">
+                <!-- <button class="btn btn-danger me-3" disabled>Cancel</button> -->
+                <button type="submit" class="btn btn-primary me-3">Submit</button>
+            </div>
+        </form>
+    </div>
+    <div class="card mb-4">
+        <form method="post" action="{% url 'dashboard:user:order-edit-origin-detail' uuid=order_form.instance.uuid %}">
+            <div class="card-header">Origin Details Edit</div>
+            <div class="card-body">
+                {% csrf_token %}
+                <div class="row ">
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label>Location Type:</label>
+                            {{order_origin_form.location_type}}
+                        </div>
+
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label>Moving Choice:</label>
+                            {{order_origin_form.moving_choice}}
+                        </div>
+
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label>Street:</label>
+                            {{order_origin_form.street}}
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label>Zip Code:</label>
+                            {{order_origin_form.zip_code}}
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label>City:</label>
+                            {{order_origin_form.city}}
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label>Floor:</label>
+                            {{order_origin_form.floor}}
+                        </div>
+
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label>Apartment Size:</label>
+                            {{order_origin_form.apartment_size}}
+                        </div>
+
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label>Has Elevator:</label>
+                            {{order_origin_form.has_elevator}}
+                        </div>
+
+                    </div>
+                    <div class="col-md-12 mb-4">
+                        {{order_origin_form.location_point}}
+                        <label>Location:</label>
+                        <div style="max-width:1800px; width:100%;height:400px" id="origin_map"></div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-end">
+                <!-- <button class="btn btn-danger me-3" disabled>Cancel</button> -->
+                <button type="submit" class="btn btn-primary me-3">Submit</button>
+            </div>
+        </form>
+    </div>
+    <div class="card mb-4">
+        <form method="post" action="{% url 'dashboard:user:order-edit-destination-detail' uuid=order_form.instance.uuid %}">
+            <div class="card-header">Destination Details Edit</div>
+            <div class="card-body">
+                {% csrf_token %}
+                <div class="row ">
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label>Location Type:</label>
+                            {{order_destination_form.location_type}}
+                        </div>
+
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label>Street:</label>
+                            {{order_destination_form.street}}
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label>Zip Code:</label>
+                            {{order_destination_form.zip_code}}
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label>City:</label>
+                            {{order_destination_form.city}}
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label>Floor:</label>
+                            {{order_destination_form.floor}}
+                        </div>
+
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="form-group">
+                            <label>Has Elevator:</label>
+                            {{order_destination_form.has_elevator}}
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-12 mb-4">
+                        {{order_destination_form.location_point}}
+                        <label>Location:</label>
+                        <div style="max-width:1800px; width:100%;height:400px" id="destination_map"></div>
+
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-end">
+                <!-- <button class="btn btn-danger me-3" disabled>Cancel</button> -->
+                <button type="submit" class="btn btn-primary me-3">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">Advertisement</div>
+        <div class="card-body">
+
+            This compact page header example strips down the page header element to create a
+            seamless, slim page header.
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'plugins/summernote/summernote-lite.min.js' %}"></script>
+<script src="{% static 'plugins/summernote/summernote-init.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+
+    var selectedDates = [];
+
+    // Initialize the Datepicker
+    flatpickr("#datePicker", {
+        mode: "multiple",
+        dateFormat: "Y-m-d",
+        conjunction: " , ",
+
+    });
+
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_MAP_API_TOKEN}}"></script>
+<script>
+    function handleLocationError(browserHasGeolocation, pos) {
+        console.log(
+            browserHasGeolocation
+                ? "Error: The Geolocation service failed."
+                : "Error: Your browser doesn't support geolocation."
+        );
+        // Optionally display an error message on the map or the UI
+    }
+
+    var origin_current_location = `{{order_origin_form.instance.get_latlng|safe}}`;
+    origin_current_location = JSON.parse(origin_current_location)
+    var origin_marker = null;
+    var origin_map = new google.maps.Map(document.getElementById("origin_map"), {
+        center: { lat: -34.397, lng: 150.644 },
+        zoom: 8,
+    });
+
+    if (origin_current_location){
+        origin_marker = new google.maps.Marker({
+            position: origin_current_location,
+            map: origin_map,
+        });
+        origin_map.setCenter(origin_current_location);
+        origin_map.setZoom(8);
+    }
+    google.maps.event.addListener(origin_map, "click", (event) => {
+        if (origin_marker) {
+            origin_marker.setMap(null);
+        }
+        origin_marker = new google.maps.Marker({
+            position: event.latLng,
+            map: origin_map,
+        });
+        // Create GeoJSON Point object
+        const geoJsonPoint = {
+            type: "Point",
+            coordinates: [event.latLng.lat(), event.latLng.lng()],
+        };
+
+        // Set the GeoJSON Point object as the value of the input field
+        const OriginLocationPointInput = document.getElementById("id_origin-location_point");
+        OriginLocationPointInput.value = JSON.stringify(geoJsonPoint);
+    });
+
+    var destination_current_location = `{{order_destination_form.instance.get_latlng|safe}}`;
+    destination_current_location = JSON.parse(destination_current_location)
+    var destination_marker = null;
+    var destination_map = new google.maps.Map(document.getElementById("destination_map"), {
+        center: { lat: -34.397, lng: 150.644 },
+        zoom: 8,
+    });
+
+
+    if (destination_current_location){
+        destination_marker = new google.maps.Marker({
+            position: destination_current_location,
+            map: destination_map,
+        });
+        destination_map.setCenter(destination_current_location);
+        destination_map.setZoom(8);
+    }
+    google.maps.event.addListener(destination_map, "click", (event) => {
+        if (destination_marker) {
+            destination_marker.setMap(null);
+        }
+        destination_marker = new google.maps.Marker({
+            position: event.latLng,
+            map: destination_map,
+        });
+        // Create GeoJSON Point object
+        const geoJsonPoint = {
+            type: "Point",
+            coordinates: [event.latLng.lat(), event.latLng.lng()],
+        };
+
+        // Set the GeoJSON Point object as the value of the input field
+        const DestinationLocationPointInput = document.getElementById("id_destination-location_point");
+        DestinationLocationPointInput.value = JSON.stringify(geoJsonPoint);
+    });
+
+</script>
+
+{% endblock extra_js %}
